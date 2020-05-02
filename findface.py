@@ -19,7 +19,7 @@ def compare_faces(file1, file2):
     
 def face_rec(file, person):
    
-    known_faces = [(person['name'], urllib.request.urlopen(person['url']))]
+    known_faces = [(person[0]['name'], urllib.request.urlopen(person[0]['userPicture']))]
 
     try:        
         for name, known_file in known_faces:
@@ -28,4 +28,4 @@ def face_rec(file, person):
         return 'Unknown'
 
     except:
-        return 'bugou'
+        return 'Not find'

@@ -1,6 +1,7 @@
 import boto3
 import json
 import decimal
+import requests
 from boto3.dynamodb.conditions import Key, Attr
 from botocore.exceptions import ClientError
 
@@ -57,17 +58,20 @@ def create_item(form, file, filename):
         return "Created"
 
 # Capturando Elemento do Banco
-def get_item():
+def get_item(user_id, roomId):
 
-    try:
-        response = table.get_item(
-            Key={
-                'id': '1'
-            }
-        )
-    except ClientError as e:
-        print(e.response['Error']['Message'])
-    else:
-        item = response['Item']
-        return (json.dumps(item, indent=4, cls=DecimalEncoder))
+    url = r'https://84x8skef0k.execute-api.sa-east-1.amazonaws.com/dev/room/participant'
+    
+    obj = {
+            'id' : user_id,
+            'roomId' : roomId
+    }
+    print (user_id)
+        # try:
+    # person = requests.post(url, json=json.dumps(obj), headers = {'content-type': 'application/json'})
+
+    # except ClientError as e:
+    #     print(e.response['Error']['Message'])
+    # else:
+    # return (json.dumps(person, indent=4, cls=DecimalEncoder))
           
