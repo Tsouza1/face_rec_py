@@ -9,8 +9,6 @@ from botocore.exceptions import ClientError
 # dynamodb = boto3.resource('dynamodb', region_name='sa-east-1')
 # table = dynamodb.Table('sala')
 
-access_key = "AKIAZOIKPN5TFJPVJJ4Y"
-secret_key = "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"
 region_name='sa-east-1'
 
 # s3_client = boto3.client('s3', aws_access_key_id=access_key,aws_secret_access_key=secret_key, region_name=region_name)
