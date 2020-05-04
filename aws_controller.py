@@ -2,12 +2,18 @@ import boto3
 import json
 import decimal
 import requests
+import urllib.request
 from boto3.dynamodb.conditions import Key, Attr
 from botocore.exceptions import ClientError
 
-dynamodb = boto3.resource('dynamodb', region_name='sa-east-1')
-table = dynamodb.Table('sala')
+# dynamodb = boto3.resource('dynamodb', region_name='sa-east-1')
+# table = dynamodb.Table('sala')
 
+access_key = "AKIAZOIKPN5TFJPVJJ4Y"
+secret_key = "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"
+region_name='sa-east-1'
+
+# s3_client = boto3.client('s3', aws_access_key_id=access_key,aws_secret_access_key=secret_key, region_name=region_name)
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, o):
@@ -57,21 +63,23 @@ def create_item(form, file, filename):
     else:
         return "Created"
 
-# Capturando Elemento do Banco
-def get_item(user_id, roomId):
+# Lendo url do Bucket
+def get_item(bucket, item):
+    url = create_presigned_url(bucket, item)
 
-    url = r'https://84x8skef0k.execute-api.sa-east-1.amazonaws.com/dev/room/participant'
+    img = urllib.request.urlopen(url)
     
-    obj = {
-            'id' : user_id,
-            'roomId' : roomId
-    }
-    print (user_id)
-        # try:
-    # person = requests.post(url, json=json.dumps(obj), headers = {'content-type': 'application/json'})
+    return img
 
-    # except ClientError as e:
-    #     print(e.response['Error']['Message'])
-    # else:
-    # return (json.dumps(person, indent=4, cls=DecimalEncoder))
-          
+# Criando url temporaria
+def create_presigned_url(bucket_name, object_name, expiration=3600):
+    s3_client = boto3.client('s3', aws_access_key_id=access_key,aws_secret_access_key=secret_key, region_name=region_name)
+
+    try:
+        response = s3_client.generate_presigned_url('get_object', Params={'Bucket': bucket_name,'Key': object_name},ExpiresIn=expiration)
+
+    except ClientError as e:
+        logging.error(e)
+        return None
+
+    return response

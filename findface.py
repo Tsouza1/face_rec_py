@@ -2,6 +2,7 @@ import sys
 import urllib.request
 import face_recognition as fr
 from PIL import Image
+import aws_controller
 
 def compare_faces(file1, file2):
     # Load the jpg files into numpy arrays
@@ -19,6 +20,7 @@ def compare_faces(file1, file2):
     
 def face_rec(file, person):
    
+    # known_faces = [(person[0]['name'], aws_controller.get_item('pca-knowns-users','626315a1-7d15-4052-b645-65a14807cbcd.jpeg'))]
     known_faces = [(person[0]['name'], urllib.request.urlopen(person[0]['userPicture']))]
 
     try:        

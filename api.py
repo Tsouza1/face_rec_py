@@ -8,19 +8,25 @@ import requests
 
 
 app = Flask(__name__)
-
+# Rota para realizar reconhecimento facial
 @app.route('/face_rec', methods=['POST', 'GET'])
 def face_recognition():
     if request.method == 'POST':
     
         if 'file' in request.files:
 
+            # adiquirindo variaveis
             file = request.files.get('file')
             idPerson = request.form.get('idPerson')
+            if idPerson == None :
+                return 'Campo idPerson Obrigatório'
             roomId = request.form.get('roomId')
+            if roomId == None :
+                return 'Campo roomId Obrigatório'            
             
             url = "https://84x8skef0k.execute-api.sa-east-1.amazonaws.com/dev/room/participant"
 
+            # Criando Objeto para requisição
             obj = {
                     "id" : idPerson,
                     "roomId" : roomId
@@ -42,3 +48,5 @@ def face_recognition():
             else:
                 resp_data = "Register"
             return name
+
+app.run()
