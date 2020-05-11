@@ -5,7 +5,7 @@ from PIL import Image
 import aws_controller
 
 def compare_faces(file1, file2):
-    # Load the jpg files into numpy arrays
+    # Carregando Imgans em um Numpy Array
     image1 = fr.load_image_file(file1)
     image2 = fr.load_image_file(file2)
     
@@ -13,16 +13,15 @@ def compare_faces(file1, file2):
     image1_encoding = fr.face_encodings(image1)[0]
     image2_encoding = fr.face_encodings(image2)[0]
     
-    # Compare faces and return True / False
+    # Comparando Imagens e retornando True / False
     results = fr.compare_faces([image1_encoding], image2_encoding)    
     return results[0] 
 
     
 def face_rec(file, person):
-   
-    # known_faces = [(person[0]['name'], aws_controller.get_item('pca-knowns-users','626315a1-7d15-4052-b645-65a14807cbcd.jpeg'))]
-    known_faces = [(person[0]['name'], urllib.request.urlopen(person[0]['userPicture']))]
-
+    # Lista de Rosto conhecido recebendo o Nome e Imagem
+    known_faces = [(person[0]['name'], aws_controller.get_item('pca-knowns-users', person[0]['userPicture']))]
+    
     try:        
         for name, known_file in known_faces:
             if compare_faces(known_file,file):

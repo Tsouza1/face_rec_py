@@ -1,13 +1,10 @@
 from flask import Flask, request, json
 import aws_controller
-from werkzeug.utils import secure_filename
 from findface import face_rec
-import urllib.request
 import requests
-# import urllib.request
-
 
 app = Flask(__name__)
+
 # Rota para realizar reconhecimento facial
 @app.route('/face_rec', methods=['POST', 'GET'])
 def face_recognition():
@@ -15,7 +12,7 @@ def face_recognition():
     
         if 'file' in request.files:
 
-            # adiquirindo variaveis
+            # Recebendo Variaveis
             file = request.files.get('file')
             idPerson = request.form.get('idPerson')
             if idPerson == None :
@@ -24,7 +21,7 @@ def face_recognition():
             if roomId == None :
                 return 'Campo roomId Obrigatório'            
             
-            url = "https://84x8skef0k.execute-api.sa-east-1.amazonaws.com/dev/room/participant"
+            url = "https://ngpy61m0ak.execute-api.sa-east-1.amazonaws.com/dev/room/participant"
 
             # Criando Objeto para requisição
             obj = {
@@ -34,12 +31,12 @@ def face_recognition():
             headers = {
             'Content-Type': 'application/json'
             }
-            # print (json.dumps(obj))
+
+            # Realizando Requisição para Lambda
             response = requests.request("POST", url, headers=headers, json = obj)
             person = json.loads(response.text)
 
-            # person = aws_controller.get_item(idPerson, roomId)
-             
+            # Chamando Aplicação de Reconhecimento Facial           
             name = face_rec(file, person)    
             if name == 'Unknown':
                 resp_data = "not register"
@@ -48,5 +45,3 @@ def face_recognition():
             else:
                 resp_data = "Register"
             return name
-
-app.run()
