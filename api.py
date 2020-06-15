@@ -45,5 +45,3 @@ def face_recognition():
             else:
                 resp_data = "Register"
             return name
-
-app.run()
