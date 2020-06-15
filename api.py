@@ -21,7 +21,7 @@ def face_recognition():
             if roomId == None :
                 return 'Campo roomId Obrigatório'            
             
-            url = "https://ngpy61m0ak.execute-api.sa-east-1.amazonaws.com/dev/room/participant"
+            url = "https://x29x40ex17.execute-api.sa-east-1.amazonaws.com/dev/room/participant"
 
             # Criando Objeto para requisição
             obj = {
@@ -31,11 +31,11 @@ def face_recognition():
             headers = {
             'Content-Type': 'application/json'
             }
-
+            
             # Realizando Requisição para Lambda
             response = requests.request("POST", url, headers=headers, json = obj)
             person = json.loads(response.text)
-
+            print(person['name'])
             # Chamando Aplicação de Reconhecimento Facial           
             name = face_rec(file, person)    
             if name == 'Unknown':
@@ -45,3 +45,5 @@ def face_recognition():
             else:
                 resp_data = "Register"
             return name
+
+app.run()
