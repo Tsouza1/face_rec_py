@@ -4,6 +4,14 @@ import face_recognition as fr
 from PIL import Image
 import aws_controller
 
+def find_face(file):
+    # Load the file into a numpy array
+    image = fr.load_image_file(file)
+
+    face_locations = fr.face_locations(image)
+    
+    return (format(len(face_locations)))
+
 def compare_faces(file1, file2):
     # Carregando Imgans em um Numpy Array
     image1 = fr.load_image_file(file1)
@@ -25,7 +33,7 @@ def face_rec(file, person):
     try:        
         for name, known_file in known_faces:
             if compare_faces(known_file,file):
-                return name
+                return True
         return 'Unknown'
 
     except:

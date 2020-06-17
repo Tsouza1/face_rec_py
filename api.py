@@ -1,9 +1,11 @@
-from flask import Flask, request, json
+from flask import Flask, request, json, jsonify
 import aws_controller
-from findface import face_rec
+from findface import face_rec,find_face
 import requests
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 # Rota para realizar reconhecimento facial
 @app.route('/face_rec', methods=['POST', 'GET'])
@@ -22,7 +24,6 @@ def face_recognition():
                 return 'Campo roomId Obrigatório'            
             
             url = "https://x29x40ex17.execute-api.sa-east-1.amazonaws.com/dev/room/participant"
-            
 
             # Criando Objeto para requisição
             obj = {
@@ -37,12 +38,14 @@ def face_recognition():
             response = requests.request("POST", url, headers=headers, json = obj)
             person = json.loads(response.text)
             print(person['name'])
-            # Chamando Aplicação de Reconhecimento Facial           
-            name = face_rec(file, person)    
-            if name == 'Unknown':
-                resp_data = "not register"
-            elif name == 'Not find':              
-                resp_data = 'Not find any face'
-            else:
-                resp_data = "Register"
-            return name
+            # Chamando Aplicação de Reconhecimento Facial
+            if find_face(file) == 1: 
+                name = face_rec(file, person)    
+                if name == 'Unknown':
+                    resp_data = "not register"
+                elif name == 'Not find':              
+                    resp_data = 'Not find any face'
+                else:
+                    resp_data = "Register"
+                return name
+app.run()
